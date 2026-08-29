@@ -105,7 +105,16 @@ conexión. Las siguientes generaciones tardan ~30-60 segundos, según tu GPU.
 - **"No se encontró el código fuente de TripoSR"**: falta el paso 2 — clona
   `TripoSR` dentro de la carpeta del proyecto.
 - **Out of memory (GPU)**: cierra otras apps que usen la GPU, o usa una imagen
-  más pequeña. TripoSR necesita ~6-8GB de VRAM libres como mínimo.
+  más pequeña. TripoSR necesita ~6-8GB de VRAM libres como mínimo. En GPUs con
+  poca VRAM (4-6GB, ej. RTX 3050) prueba bajar el tamaño de chunk del renderer
+  antes de arrancar la app:
+  ```bash
+  set TRIPOSR_CHUNK_SIZE=512
+  python main.py
+  ```
+  (el valor por defecto ya es 2048, más bajo que el 8192 recomendado por
+  TripoSR para tarjetas de 8GB+; si sigue fallando, baja a 256 o incluso 128 —
+  la generación será más lenta pero usa menos memoria).
 - **La generación falla al compilar `torchmcubes`**: instala un compilador de
   C++ (`build-essential` en Debian/Ubuntu, Build Tools de Visual Studio en
   Windows) y vuelve a intentar `pip install -r requirements.txt`.

@@ -11,6 +11,7 @@ of how TripoSR itself is laid out. See README.md for setup instructions.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 import threading
 from pathlib import Path
@@ -28,6 +29,12 @@ TRIPOSR_REPO_CANDIDATES = [
 
 PRETRAINED_MODEL = "stabilityai/TripoSR"
 MIN_RECOMMENDED_VRAM_GB = 8
+
+# The NeRF renderer's chunk size trades VRAM for speed: TripoSR's own default
+# (8192) targets 8GB+ cards. Override with the TRIPOSR_CHUNK_SIZE env var;
+# lower it further (e.g. 512) on cards with less VRAM if you still hit
+# out-of-memory errors.
+DEFAULT_CHUNK_SIZE = int(os.environ.get("TRIPOSR_CHUNK_SIZE", "2048"))
 
 
 class GPUNotAvailableError(RuntimeError):
@@ -126,10 +133,12 @@ class TripoSRPipeline:
             config_name="config.yaml",
             weight_name="model.ckpt",
         )
-        self.model.renderer.set_chunk_size(8192)
+        self.model.renderer.set_chunk_size(DEFAULT_CHUNK_SIZE)
         self.model.to(self.device)
         self.rembg_session = rembg.new_session()
-        logger.info("Modelo TripoSR listo en %s.", self.device)
+        logger.info(
+            "Modelo TripoSR listo en %s (chunk_size=%d).", self.device, DEFAULT_CHUNK_SIZE
+        )
 
     def generate(self, image: Image.Image, mesh_resolution: int = 256):
         """Run the full image -> 3D mesh pipeline and return a trimesh.Trimesh."""
@@ -144,7 +153,11 @@ class TripoSRPipeline:
         image_arr = image_arr[:, :, :3] * image_arr[:, :, 3:4] + (1 - image_arr[:, :, 3:4]) * 0.5
         image = Image.fromarray((image_arr * 255.0).astype(np.uint8))
 
-        with torch.no_grad():
-            scene_codes = self.model([image], device=self.device)
-        meshes = self.model.extract_mesh(scene_codes, resolution=mesh_resolution)
+        torch.cuda.empty_cache()
+        try:
+            with torch.no_grad():
+                scene_codes = self.model([image], device=self.device)
+            meshes = self.model.extract_mesh(scene_codes, resolution=mesh_resolution)
+        finally:
+            torch.cuda.empty_cache()
         return meshes[0]
