@@ -1,0 +1,239 @@
+:root {
+  color-scheme: dark;
+  --bg: #14151a;
+  --panel: #1e2026;
+  --border: #2c2f38;
+  --text: #eceef2;
+  --text-muted: #9298a6;
+  --accent: #5b8cff;
+  --accent-hover: #7aa2ff;
+  --error: #ff6b6b;
+  --warning: #f5b942;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-header {
+  padding: 1.5rem 2rem 0.5rem;
+}
+
+.app-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.banner {
+  margin: 0.75rem 2rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.banner--hidden {
+  display: none;
+}
+
+.banner--error {
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+.banner--warning {
+  background: rgba(245, 185, 66, 0.12);
+  border: 1px solid var(--warning);
+  color: var(--warning);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem 2rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.dropzone {
+  position: relative;
+  min-height: 260px;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone--active {
+  border-color: var(--accent);
+  background: rgba(91, 140, 255, 0.06);
+}
+
+.dropzone-empty {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.dropzone-empty .or {
+  margin: 0.4rem 0;
+  font-size: 0.8rem;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 260px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.btn--primary {
+  width: 100%;
+  margin-top: 1rem;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--secondary {
+  background: var(--border);
+  color: var(--text);
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn--secondary:hover {
+  background: #383c47;
+}
+
+.progress-wrap {
+  margin-top: 1rem;
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.error-message {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid var(--error);
+  color: var(--error);
+  font-size: 0.85rem;
+}
+
+.viewer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.viewer-container {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #1b1d22;
+}
+
+.viewer-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.viewer-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.viewer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.wireframe-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.download-links {
+  display: flex;
+  gap: 0.5rem;
+}

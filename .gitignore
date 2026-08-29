@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+env/
+
+# TripoSR source checkout (cloned separately, see README.md)
+/TripoSR/
+/third_party/
+
+# Generated 3D models (job outputs)
+models/*/
+!models/.gitkeep
+
+# Misc
+.DS_Store
+*.log
