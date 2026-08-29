@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image to 3D · TripoSR</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Imagen &rarr; Modelo 3D</h1>
+      <p class="subtitle">Genera un modelo 3D a partir de una sola imagen, 100% local, con TripoSR.</p>
+    </header>
+
+    <div id="gpu-banner" class="banner banner--hidden" role="alert"></div>
+
+    <main class="layout">
+      <section class="panel">
+        <div id="dropzone" class="dropzone">
+          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" hidden />
+          <div id="dropzone-empty" class="dropzone-empty">
+            <p>Arrastra una imagen aquí</p>
+            <p class="or">o</p>
+            <button type="button" id="browse-btn" class="btn btn--secondary">Elegir archivo</button>
+          </div>
+          <img id="preview-image" class="preview-image" hidden alt="Vista previa de la imagen" />
+        </div>
+
+        <button type="button" id="generate-btn" class="btn btn--primary" disabled>Generar 3D</button>
+
+        <div id="progress-wrap" class="progress-wrap" hidden>
+          <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+          <p id="progress-label" class="progress-label">Generando modelo 3D...</p>
+        </div>
+
+        <p id="error-message" class="error-message" hidden></p>
+      </section>
+
+      <section class="panel viewer-panel">
+        <div id="viewer-container" class="viewer-container">
+          <canvas id="viewer-canvas"></canvas>
+          <p id="viewer-placeholder" class="viewer-placeholder">
+            El modelo 3D generado aparecerá aquí
+          </p>
+        </div>
+
+        <div id="viewer-controls" class="viewer-controls" hidden>
+          <label class="wireframe-toggle">
+            <input type="checkbox" id="wireframe-toggle" />
+            Wireframe
+          </label>
+          <div class="download-links">
+            <a id="download-obj" class="btn btn--secondary" download>.OBJ</a>
+            <a id="download-glb" class="btn btn--secondary" download>.GLB</a>
+            <a id="download-ply" class="btn btn--secondary" download>.PLY</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="/static/viewer.js"></script>
+    <script type="module" src="/static/app.js"></script>
+  </body>
+</html>
